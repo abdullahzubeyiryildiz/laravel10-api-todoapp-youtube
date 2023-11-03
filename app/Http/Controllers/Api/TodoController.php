@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use HttpResponse;
 use Illuminate\Http\Request;
 use App\Services\TodoService;
 use App\Http\Requests\TodoRequest;
@@ -21,7 +22,7 @@ class TodoController extends Controller
    public function index(Request $request){
 
            $todos = TodoResource::collection($this->todoService->getAll());
-           return apiResponse(__('Todo'),200,  $todos);
+           return apiResponse(__('Todo'),HttpResponse::HTTP_OK,  $todos);
    }
 
 
@@ -30,7 +31,7 @@ class TodoController extends Controller
 
         $todo = $this->todoService->store($data);
 
-        return apiResponse(__('Todo'),200, $todo);
+        return apiResponse(__('Todo'),HttpResponse::HTTP_OK, $todo);
     }
 
 
@@ -48,14 +49,14 @@ class TodoController extends Controller
 
     $todo = $this->todoService->find($id);
 
-    return apiResponse(__('Todo'),200, $todo);
+    return apiResponse(__('Todo'),HttpResponse::HTTP_OK, $todo);
 }
 
 
 public function destroy($id, Request $request){
 
      $this->todoService->delete($id);
-    return apiResponse(__('Todo'),200);
+    return apiResponse(__('Todo'),HttpResponse::HTTP_OK);
 }
 
 

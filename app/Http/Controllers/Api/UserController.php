@@ -32,7 +32,7 @@ class UserController extends Controller
 
          $user = $this->userService->register($data);
 
-        return apiResponse(__('Kayıt Başarıyla Oluşturuldu.'), 200, ['user' => $user]);
+        return apiResponse(__('Kayıt Başarıyla Oluşturuldu.'), HttpResponse::HTTP_OK, ['user' => $user]);
    }
 
    public function login(LoginRequest $request)
@@ -42,17 +42,17 @@ class UserController extends Controller
 
        if ($user) {
            $token = $user->createToken('api_case')->accessToken;
-           return apiResponse(__('Giriş Başarılı'), 200, ['token' => $token,'user' => $user]);
+           return apiResponse(__('Giriş Başarılı'), HttpResponse::HTTP_OK, ['token' => $token,'user' => $user]);
        }
 
-       return apiResponse(__('Hatalı Giriş'), 401);
+       return apiResponse(__('Hatalı Giriş'), HttpResponse::HTTP_UNAUTHORIZED);
    }
  public function logout(Request $request) {
     if (Auth::guard('api')->check()) {
         Auth::guard('api')->user()->token()->revoke();
         return apiResponse(__('Başarıyla Çıkış Yapıldı'), 200,['user'=>auth()->user()]);
     } else {
-        return apiResponse(__('Çıkış Yapıldı'), 404);
+        return apiResponse(__('Çıkış Yapıldı'), HttpResponse::HTTP_UNAUTHORIZED);
     }
 
  }
@@ -67,9 +67,9 @@ class UserController extends Controller
       $user =  $this->userService->updateUserImage(auth()->user()->id, $request->file('image'));
 
      if ($user) {
-         return apiResponse(__('Updated Image'), 200, ['user' => new UserResource($user)]);
+         return apiResponse(__('Updated Image'), HttpResponse::HTTP_OK, ['user' => new UserResource($user)]);
      }
 
-     return apiResponse(__('Information is Incorrect'), 400);
+     return apiResponse(__('Information is Incorrect'), HttpResponse::HTTP_UNAUTHORIZED);
  }
 }
